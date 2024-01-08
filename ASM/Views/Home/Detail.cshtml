@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        padding: 20px;
+    }
+
+    .detail-container {
+        max-width: 600px;
+        margin: auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+
+    h2 {
+        color: midnightblue;
+    }
+
+    p {
+        margin-bottom: 10px;
+    }
+
+    .btn {
+        margin-right: 10px;
+    }
+</style>
+
+<div class="detail-container">
+    <img src="~/images/@Model.Picture" alt="Book Image" width="200" height="200" />
+    <h2>@Model.Title</h2>
+    <p>Description: @Model.Description</p>
+    <p>Author: @Model.Author</p>
+    <p>Price: $@Model.Price</p>
+
+
+    @* @if (User.IsInRole("Admin") || User.IsInRole("Customer"))
+    {
+        <a asp-action="AddCart" asp-route-id="@Model.Id" class="btn btn-primary">Add to Cart</a>
+    } *@
+    <a asp-action="AddCart" asp-route-id="@Model.Id" class="btn btn-primary">Add to Cart</a>
+    <a asp-action="ListCart" class="btn btn-success">View Cart</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to Index</a>
+</div>
+

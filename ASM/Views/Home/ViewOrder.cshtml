@@ -1,0 +1,89 @@
+﻿@model List<Order>
+@{
+    ViewData["Title"] = "ViewOrder";
+}
+
+<h1>User Orders</h1>
+<style>
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    h3 {
+        margin-top: 20px;
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    th:first-child,
+    td:first-child {
+        width: 40%; 
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        width: 20%; 
+    }
+
+    th:nth-child(3),
+    td:nth-child(3) {
+        width: 20%; 
+    }
+
+    th:nth-child(4),
+    td:nth-child(4) {
+        width: 20%; 
+    }
+</style>
+
+
+@foreach (var order in Model)
+{
+    <h3>Order: @order.Id</h3>
+    <p>Order Date: @order.OrderDate</p>
+
+    <table>
+        <tr>
+            <th style="padding-left: 20px;">Book</th>
+            <th style="padding-left: 20px;">Image</th>
+            <th style="padding-left: 20px;">Quantity</th>
+            <th style="padding-left: 20px;">Price</th>
+        </tr>
+        @foreach (var item in order.OrderItems)
+        {
+            <tr>
+                <td>@item.Book.Id</td>
+                <td><img src="~/images/@item.Book.Picture" width="120" height="200" /></td>
+                <td>@item.Quantity</td>
+                <td>@item.Price$</td>
+            </tr>
+        }
+    </table>
+}
+

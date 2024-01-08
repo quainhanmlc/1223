@@ -1,0 +1,85 @@
+﻿@model X.PagedList.IPagedList<ASM.Models.Book>
+@using X.PagedList.Mvc.Core
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+    }
+
+    .page-count {
+        font-size: 16px;
+        color: #000;
+    }
+</style>
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    <label for="category">Filter by Category:</label>
+    <select name="category" id="category">
+        <option value="">All Categories</option>
+        <!-- Add options dynamically based on your categories -->
+        @foreach (var category in ViewBag.Categories)
+        {
+            <option value="@category.Id">@category.Name</option>
+        }
+    </select>
+
+    <label for="searchTitle">Search by Title:</label>
+    <input type="text" name="searchTitle" id="searchTitle" value="@ViewBag.SearchTitle" />
+
+    <input type="submit" value="Filter" />
+}
+
+
+
+<div class="container">
+    <div class="row">
+        @foreach (var item in ViewBag.Book)
+        {
+            <div class="col-md-3">
+                <div class="card mt-2">
+                    <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
+                         data-mdb-ripple-color="light">
+                        <a asp-controller="Home" asp-action="Detail" asp-route-id="@item.Id">
+                            <img src="/images/@item.Picture"
+                                 class="w-100" />
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <a asp-controller="Home" asp-action="Detail" asp-route-id="@item.Id" class="text-reset">
+                            <h5 class="card-title mb-3">@item.Title</h5>
+                        </a>
+                        <a href="" class="text-reset">
+                            <p>@item.Author</p>
+                        </a>
+                        <h6 class="mb-3">Price: $@item.Price</h6>
+                        <a asp-action="AddCart" asp-route-id="@item.Id" class="btn btn-primary">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="container pagination">
+    <div class="row">
+        <div class="col-md-12">
+            <span class="page-count">Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount</span>
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+        </div>
+    </div>
+</div>
+    

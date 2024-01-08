@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewData["Title"] = "ListCart";
+}
+
+<style>
+    td, th {
+        padding: 10px;
+    }
+
+    .button-container form {
+        display: inline-block;
+        margin-right: 10px; 
+    }
+
+    .circle-button {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+    }
+
+    .green-button {
+        background-color: gray;
+        color: white;
+    }
+
+    .red-button {
+        background-color: gray;
+        color: white;
+    }
+</style>
+<script src="~/js/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".updateCart").click(function (event) {
+            event.preventDefault();
+            var quantity = $(".quantity_" + $(this).attr("data-id")).val();
+            console.log(quantity);
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("updateCart","Home")",
+                data: {
+                    id: $(this).attr("data-id"),
+                    quantity: quantity
+                },
+                success: function (result) {
+                    window.location.href = '@Url.Action("ListCart","Home")';
+                }
+            });
+        });
+    });
+</script>
+
+    <div class="List-cart">
+        <table>
+            <tr>
+                <th>No</th>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            @{
+                int counter = 0;
+                foreach (var item in ViewBag.carts)
+                {
+                    string txt_class = "quantity_" + item.Product.Id;
+                    decimal total = item.Product.Price * item.Quantity;
+                    counter++;
+                    <tr>
+                        <td>@counter</td>
+                        <td><img src="~/images/@item.Product.Picture" width="120" height="200" /></td>
+                        <td>@item.Product.Title</td>
+                        <td><input type="number" class="@txt_class" value="@item.Quantity" min="1" /></td>
+                        <td>$@item.Product.Price</td>
+                        <td>$@total</td>
+                        <td><a href="" data-id="@item.Product.Id" class="updateCart">Update</a></td>
+                        <td><a asp-controller="Home" asp-action="deleteCart" asp-route-id="@item.Product.Id">Delete</a></td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+<div>
+    <a id="orderNow" href="@Url.Action("CreateOrder", "Orders")" class="btn btn-success">Order Now</a>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#orderNow").click(function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "/Orders/CreateOrder",
+                success: function () {
+                    window.location.href = '/Home/SuccessfullyOrder';
+                },
+                error: function () {
+                    alert('Error creating order');
+                }
+            });
+        });
+    });
+</script>
+
